@@ -1,0 +1,186 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Create an Event
+{% endblock %}
+
+{% block main %}
+<main class="container p-5">
+    <!-- from https://getbootstrap.com/docs/4.0/components/forms/#custom-forms -->
+    <font color="white">
+    <h2 class="page-title">Create an Event</h2>
+    <hr>
+    <form id="createevent" action="/createevent" method="post" enctype="multipart/form-data">
+        <div class="form-group row">
+            <label for="eventname" class="col-sm-2 col-form-label">Event Name</label>
+            <div class="col-sm-10">
+                <input autofocus class="form-control" name="eventname" id="eventname" placeholder="Type your event's name here" type="text">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="club" class="col-sm-2 col-form-label">Club</label>
+            <div class="col-sm-10">
+                <select class="form-control" name="club" id="club">
+                    <option value="" selected disabled>Select Your Club</option>
+                    {% for club in clubs %}
+                        <option value="{{ club["name"] }}">{{ club["name"] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="description" class="col-sm-2 col-form-label">Description</label>
+            <div class="col-sm-10">
+                <input class="form-control" name="description" id="description" placeholder="Describe Your Event" type="text">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="pictureuploadcheck" class="col-sm-2 col-form-label">Would you like to upload a picture?</label>
+            <div class="col-sm-10">
+                <select class="form-control" name="pictureuploadcheck" id="pictureuploadcheck">
+                    <option value="" selected disabled>Yes/No</option>
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="picture" class="col-sm-2 col-form-label">Upload A Picture</label>
+            <div class="col-sm-10">
+                <input class="form-control-file" name="picture" id="picture" type="file">
+            </div>
+        </div>
+        <fieldset class="form-group">
+            <div class="row">
+                <legend class="col-sm-2 col-form-label">Tags</legend>
+                <div class="col-sm-10">
+                    {% for tag in tags %}
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="{{tag}}" id="{{tag}}" value="{{tag}}">
+                            <label class="form-check-label" for="{{tag}}">
+                                {{tag}}
+                            </label>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </fieldset>
+        <div class="form-group row">
+            <label for="description" class="col-sm-2 col-form-label">Location</label>
+            <div class="col-sm-10">
+                <input class="form-control" name="location" id="location" placeholder="Event Location" type="text">
+            </div>
+        </div>
+        <div class="form-row">
+            <label for="startmonth" class="col-sm-2 col-form-label">Starting Date</label>
+            <div class="col-md-2">
+                <select class="form-control" name="startmonth" id="startmonth">
+                    <option value="" selected disabled>Month</option>
+                    {% for i in range (12) %}
+                        <option value="{{ "%02d" % (i+1) }}">{{ months[i] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-1">
+                <select class="form-control" name="startday" id="startday">
+                    <option value="" selected disabled>Day</option>
+                    {% for i in range (31) %}
+                        <option value="{{ "%02d" % (i+1) }}">{{ "%02d" % (i+1) }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-1">
+                <select class="form-control" name="startyear" id="startyear">
+                    <option value="" selected disabled>Year</option>
+                    <option value="2018">2018</option>
+                    <option value="2019">2019</option>
+                </select>
+            </div>
+        </div>
+        <br>
+        <div class="form-row">
+            <label for="endmonth" class="col-sm-2 col-form-label">Ending Date</label>
+            <div class="col-md-2">
+                <select class="form-control" name="endmonth" id="endmonth">
+                    <option value="" selected disabled>Month</option>
+                    {% for i in range (12) %}
+                        <option value="{{ i+1 }}">{{ months[i] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-1">
+                <select class="form-control" name="endday" id="endday">
+                    <option value="" selected disabled>Day</option>
+                    {% for i in range (31) %}
+                        <option value="{{ "%02d" % (i+1) }}">{{ "%02d" % (i+1) }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-1">
+                <select class="form-control" name="endyear" id="endyear">
+                    <option value="" selected disabled>Year</option>
+                    <option value="2018">2018</option>
+                    <option value="2019">2019</option>
+                </select>
+            </div>
+        </div>
+        <br>
+        <div class="form-row">
+            <label for="starthour" class="col-sm-2 col-form-label">Start Time</label>
+            <div class="col-md-1">
+                <select class="form-control" name="starthour" id="starthour">
+                    <option value="" selected disabled>Hour</option>
+                    {% for i in range (12) %}
+                        <option value="{{ "%02d" % (i+1) }}">{{ "%02d" % (i+1) }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-1.5">
+                <select class="form-control" name="startminutes" id="startminutes">
+                    <option value="" selected disabled>Minutes</option>
+                    {% for i in range (0, 55, 5) %}
+                        <option value="{{ "%02d" % i }}">{{ "%02d" % i }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-1.5">
+                <select class="form-control" name="startampm" id="startampm">
+                    <option value="" selected disabled>AM/PM</option>
+                    <option value="am">AM</option>
+                    <option value="pm">PM</option>
+                </select>
+            </div>
+        </div>
+        <br>
+        <div class="form-row">
+            <label for="endhour" class="col-sm-2 col-form-label">End Time</label>
+            <div class="col-md-1">
+                <select class="form-control" name="endhour" id="endhour">
+                    <option value="" selected disabled>Hour</option>
+                    {% for i in range (12) %}
+                        <option value="{{ "%02d" % (i+1) }}">{{ "%02d" % (i+1) }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-1.5">
+                <select class="form-control" name="endminutes" id="endminutes">
+                    <option value="" selected disabled>Minutes</option>
+                    {% for i in range (0, 55, 5) %}
+                        <option value="{{ "%02d" % i }}">{{ "%02d" % i }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-1.5">
+                <select class="form-control" name="endampm" id="endampm">
+                    <option value="" selected disabled>AM/PM</option>
+                    <option value="am">AM</option>
+                    <option value="pm">PM</option>
+                </select>
+            </div>
+        </div>
+        <br>
+        <button class="btn btn-primary" type="submit">Create Event</button>
+    </form>
+    </font>
+</main>
+{% endblock %}
